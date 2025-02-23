@@ -27,7 +27,9 @@ class _SignInViewState extends State<LoginPage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const Spacer(),
-              logging?const Card(child: SignInForm()):const Card(child: SignUpForm()),
+              logging
+                  ? const Card(child: SignInForm())
+                  : const Card(child: SignUpForm()),
               const Padding(
                   padding: EdgeInsets.all(5.0),
                   child: Row(
@@ -41,20 +43,27 @@ class _SignInViewState extends State<LoginPage> {
                   children: [
                     MaterialButton(
                         disabledTextColor: Theme.of(context).primaryColor,
-                        onPressed: logging?null:(){
-                          setState(() {
-                            logging = !logging;
-                          });
-                        },
+                        onPressed: logging
+                            ? null
+                            : () {
+                                setState(() {
+                                  logging = !logging;
+                                });
+                              },
                         child: const Text("Sign in")),
-                    Text("/", style: Theme.of(context).textTheme.labelMedium,),
+                    Text(
+                      "/",
+                      style: Theme.of(context).textTheme.labelMedium,
+                    ),
                     MaterialButton(
                         disabledTextColor: Theme.of(context).primaryColor,
-                        onPressed: logging?(){
-                          setState(() {
-                            logging = !logging;
-                          });
-                        }: null,
+                        onPressed: logging
+                            ? () {
+                                setState(() {
+                                  logging = !logging;
+                                });
+                              }
+                            : null,
                         child: const Text("Sign up"))
                   ],
                 ),
@@ -67,7 +76,6 @@ class _SignInViewState extends State<LoginPage> {
   }
 }
 
-
 class SignInForm extends StatefulWidget {
   const SignInForm({Key? key}) : super(key: key);
 
@@ -75,7 +83,7 @@ class SignInForm extends StatefulWidget {
   _SignInFormState createState() => _SignInFormState();
 }
 
-class _SignInFormState extends State<SignInForm> implements SignInView{
+class _SignInFormState extends State<SignInForm> implements SignInView {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   String? passwordError;
@@ -84,7 +92,6 @@ class _SignInFormState extends State<SignInForm> implements SignInView{
   bool loading = false;
   LoginPresenter presenter = getIt<LoginPresenter>();
 
-
   void clearErrors() {
     setState(() {
       passwordError = null;
@@ -92,44 +99,48 @@ class _SignInFormState extends State<SignInForm> implements SignInView{
       globalError = null;
     });
   }
+
   @override
   void initState() {
     super.initState();
     presenter.setSignInView(this);
     clearErrors();
-
   }
 
   @override
   Widget build(BuildContext context) {
     return Form(
-
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(padding: const EdgeInsets.all(25),
-            child: Text('Sign in', style: Theme.of(context).textTheme.headlineMedium),
+          Padding(
+            padding: const EdgeInsets.all(25),
+            child: Text('Sign in',
+                style: Theme.of(context).textTheme.headlineMedium),
           ),
           Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child:
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children:
-                [
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
                   TextFormField(
                     decoration: const InputDecoration(
                       label: Text("email"),
                     ),
-                      controller: _emailController,
-                    ),
+                    controller: _emailController,
+                  ),
                   Padding(
                     padding: const EdgeInsets.only(left: 10),
-                    child: emailError!=null?Text(emailError!, style: const TextStyle(color: Colors.red),): const Text(""),)
-              ],
-            )
-          ),
+                    child: emailError != null
+                        ? Text(
+                            emailError!,
+                            style: const TextStyle(color: Colors.red),
+                          )
+                        : const Text(""),
+                  )
+                ],
+              )),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: Column(
@@ -144,7 +155,13 @@ class _SignInFormState extends State<SignInForm> implements SignInView{
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 10),
-                  child: passwordError!=null?Text(passwordError!, style: const TextStyle(color: Colors.red),): const Text(""),)
+                  child: passwordError != null
+                      ? Text(
+                          passwordError!,
+                          style: const TextStyle(color: Colors.red),
+                        )
+                      : const Text(""),
+                )
               ],
             ),
           ),
@@ -152,21 +169,32 @@ class _SignInFormState extends State<SignInForm> implements SignInView{
             mainAxisAlignment: MainAxisAlignment.end,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Flexible(child:
-              globalError!=null?Text(globalError!, style: const TextStyle(color: Colors.red),): const Text("")
-                ,),
-              Padding(padding: EdgeInsets.only(right: 8),child: loading?const CircularProgressIndicator():const Text(""),),
-              Padding(
-              padding: const EdgeInsets.only(right: 8, bottom: 8),
-              child: FilledButton(
-                onPressed: () {
-                  clearErrors();
-                  presenter.login(_passwordController.text, _emailController.text);
-                },
-                child: const Text("Sign in"),
+              Flexible(
+                child: globalError != null
+                    ? Text(
+                        globalError!,
+                        style: const TextStyle(color: Colors.red),
+                      )
+                    : const Text(""),
               ),
-
-            )],
+              Padding(
+                padding: const EdgeInsets.only(right: 8),
+                child: loading
+                    ? const CircularProgressIndicator()
+                    : const Text(""),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(right: 8, bottom: 8),
+                child: FilledButton(
+                  onPressed: () {
+                    clearErrors();
+                    presenter.login(
+                        _passwordController.text, _emailController.text);
+                  },
+                  child: const Text("Sign in"),
+                ),
+              )
+            ],
           ),
         ],
       ),
@@ -196,10 +224,9 @@ class _SignInFormState extends State<SignInForm> implements SignInView{
 
   @override
   void openMainPage() {
-
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => MainPage()),
+      MaterialPageRoute(builder: (context) => const MainPage()),
     );
   }
 
@@ -218,7 +245,6 @@ class _SignInFormState extends State<SignInForm> implements SignInView{
   }
 }
 
-
 class SignUpForm extends StatefulWidget {
   const SignUpForm({Key? key}) : super(key: key);
 
@@ -226,26 +252,27 @@ class SignUpForm extends StatefulWidget {
   _SignUpFormState createState() => _SignUpFormState();
 }
 
-class _SignUpFormState extends State<SignUpForm> implements SignUpView{
+class _SignUpFormState extends State<SignUpForm> implements SignUpView {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _usernameController = TextEditingController();
 
-  String? passwordError ;
+  String? passwordError;
   String? emailError;
   String? usernameError;
   String? globalError;
   bool loading = false;
   LoginPresenter presenter = getIt<LoginPresenter>();
 
-void clearErrors() {
-  setState(() {
-    passwordError  = null;
-    emailError = null;
-    usernameError = null;
-    globalError = null;
-  });
-}
+  void clearErrors() {
+    setState(() {
+      passwordError = null;
+      emailError = null;
+      usernameError = null;
+      globalError = null;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -256,14 +283,14 @@ void clearErrors() {
   @override
   Widget build(BuildContext context) {
     return Form(
-
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
             padding: const EdgeInsets.all(10),
-            child: Text('Sign up', style: Theme.of(context).textTheme.headlineMedium),
+            child: Text('Sign up',
+                style: Theme.of(context).textTheme.headlineMedium),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -271,27 +298,36 @@ void clearErrors() {
               decoration: const InputDecoration(
                 label: Text("email"),
               ),
-
               controller: _emailController,
             ),
-
           ),
           Padding(
             padding: const EdgeInsets.only(left: 10),
-            child: emailError!=null?Text(emailError!, style: const TextStyle(color: Colors.red),): const Text(""),),
+            child: emailError != null
+                ? Text(
+                    emailError!,
+                    style: const TextStyle(color: Colors.red),
+                  )
+                : const Text(""),
+          ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: TextFormField(
               decoration: const InputDecoration(
                 label: Text("username"),
               ),
-
               controller: _usernameController,
             ),
           ),
           Padding(
             padding: const EdgeInsets.only(left: 10),
-            child: usernameError!=null?Text(usernameError!, style: const TextStyle(color: Colors.red),): const Text(""),),
+            child: usernameError != null
+                ? Text(
+                    usernameError!,
+                    style: const TextStyle(color: Colors.red),
+                  )
+                : const Text(""),
+          ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: TextFormField(
@@ -304,25 +340,43 @@ void clearErrors() {
           ),
           Padding(
             padding: const EdgeInsets.only(left: 10),
-            child: passwordError!=null?Text(passwordError!, style: const TextStyle(color: Colors.red),): const Text(""),),
+            child: passwordError != null
+                ? Text(
+                    passwordError!,
+                    style: const TextStyle(color: Colors.red),
+                  )
+                : const Text(""),
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Flexible(child:
-                globalError!=null?Text(globalError!, style: const TextStyle(color: Colors.red),): const Text("")
-              ,),
-              Padding(padding: EdgeInsets.only(right: 8),child: loading?const CircularProgressIndicator():const Text(""),),
-              Padding(
-              padding: const EdgeInsets.only(right: 8, bottom: 8),
-              child: FilledButton(
-                onPressed: () {
-                  clearErrors();
-                  presenter.register(_passwordController.text, _emailController.text, _usernameController.text);
-                },
-                child: const Text("Sign up"),
+              Flexible(
+                child: globalError != null
+                    ? Text(
+                        globalError!,
+                        style: const TextStyle(color: Colors.red),
+                      )
+                    : const Text(""),
               ),
-            )],
+              Padding(
+                padding: const EdgeInsets.only(right: 8),
+                child: loading
+                    ? const CircularProgressIndicator()
+                    : const Text(""),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(right: 8, bottom: 8),
+                child: FilledButton(
+                  onPressed: () {
+                    clearErrors();
+                    presenter.register(_passwordController.text,
+                        _emailController.text, _usernameController.text);
+                  },
+                  child: const Text("Sign up"),
+                ),
+              )
+            ],
           ),
         ],
       ),
@@ -340,7 +394,7 @@ void clearErrors() {
   void openMainPage() {
     Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => MainPage()),
+      MaterialPageRoute(builder: (context) => const MainPage()),
     );
   }
 

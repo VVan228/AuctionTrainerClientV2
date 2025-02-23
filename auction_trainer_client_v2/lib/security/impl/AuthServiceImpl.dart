@@ -1,8 +1,6 @@
-
 import 'package:auction_trainer_client_v2/security/api/AuthService.dart';
 import 'package:auction_trainer_client_v2/security/model/requests/LoginRequest.dart';
 import 'package:auction_trainer_client_v2/security/model/requests/RegisterRequest.dart';
-import 'package:auction_trainer_client_v2/security/model/requests/TokenResponse.dart';
 import 'package:dio/dio.dart';
 import 'package:injectable/injectable.dart';
 
@@ -13,13 +11,11 @@ import '../web/AuthWebService.dart';
 
 @LazySingleton(as: AuthService)
 class AuthServiceImpl implements AuthService {
-
   @override
   Future<void> login(LoginRequest request) async {
     final client = AuthWebService(
         await getIt<ServerDataProvider>().getDioInstance(false),
-        baseUrl: getIt<ServerDataProvider>().getBaseUrl()
-    );
+        baseUrl: getIt<ServerDataProvider>().getBaseUrl());
 
     String? error;
 
@@ -37,7 +33,7 @@ class AuthServiceImpl implements AuthService {
       }
     });
 
-    if(error != null) {
+    if (error != null) {
       throw Exception(error);
     }
   }
@@ -46,9 +42,7 @@ class AuthServiceImpl implements AuthService {
   Future<void> register(RegisterRequest request) async {
     final client = AuthWebService(
         await getIt<ServerDataProvider>().getDioInstance(false),
-        baseUrl: getIt<ServerDataProvider>().getBaseUrl()
-    );
-
+        baseUrl: getIt<ServerDataProvider>().getBaseUrl());
 
     String? error;
 
@@ -65,10 +59,9 @@ class AuthServiceImpl implements AuthService {
           break;
       }
     });
-    
-    if(error!=null) {
+
+    if (error != null) {
       throw Exception(error);
     }
   }
-
 }

@@ -1,5 +1,4 @@
 import 'package:auction_trainer_client_v2/security/model/Room.dart';
-import 'package:auction_trainer_client_v2/security/model/User.dart';
 
 abstract class WaitingView {
   void addWatcher(String username);

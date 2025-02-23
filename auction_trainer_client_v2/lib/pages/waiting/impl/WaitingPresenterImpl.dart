@@ -1,6 +1,3 @@
-
-
-import 'dart:async';
 import 'dart:convert';
 
 import 'package:auction_trainer_client_v2/inject_config/DependenciesConfiguration.dart';
@@ -17,8 +14,7 @@ import 'package:auction_trainer_client_v2/security/web/RoomWebService.dart';
 import 'package:injectable/injectable.dart';
 
 @LazySingleton(as: WaitingPresenter)
-class WaitingPresenterImpl implements WaitingPresenter{
-
+class WaitingPresenterImpl implements WaitingPresenter {
   WaitingView? view;
   Room? room;
 
@@ -27,50 +23,55 @@ class WaitingPresenterImpl implements WaitingPresenter{
 
   @override
   void setRoom(Room room) {
-
     this.room = room;
     String channel = provider.getChannelName(room.id, false);
-    for(User u in room.connectedUsers) {
+    for (User u in room.connectedUsers) {
       view?.addParticipant(u.username);
     }
 
     messagingService.subscribe(channel: channel);
-    messagingService.setListeners(channel: channel,
-        onPublication: (event){
+    messagingService.setListeners(
+        channel: channel,
+        onPublication: (event) {
           var j = json.decode(utf8.decode(event.data, allowMalformed: true));
           var payload = j['payload'];
 
-          switch(payloadTypeFromString(payload['type'])) {
-            case PayloadType.UserLeft : {
-              view?.removeParticipant(payload['username']);
-              room.connectedUsers.remove(User(username: payload['username'], email: ""));
-              break;
-            }
-            case PayloadType.UserJoined : {
-              view?.addParticipant(payload['username']);
-              room.connectedUsers.add(User(username: payload['username'], email: ""));
-              break;
-            }
-            case PayloadType.RoomEvent : {
-              messagingService.unsubscribe(channel);
-              //TODO: Remove
-              //room.rounds[0].status = Status.ONGOING;
-              //room.rounds[0].lots[1].status = Status.ONGOING;
-              var event = RoomEventPayload.fromJson(payload);
-              if(event.intervalsEnded.isEmpty){
-                room.status = Status.ONGOING;
-                for(var i in event.intervalsStarted) {
-                  if(i.type == IntervalType.ROUND) {
-                    room.rounds[0].status = i.status;
-                  }
-                  if(i.type == IntervalType.LOT) {
-                    room.rounds[0].lots[0].status = i.status;
+          switch (payloadTypeFromString(payload['type'])) {
+            case PayloadType.UserLeft:
+              {
+                view?.removeParticipant(payload['username']);
+                room.connectedUsers
+                    .remove(User(username: payload['username'], email: ""));
+                break;
+              }
+            case PayloadType.UserJoined:
+              {
+                view?.addParticipant(payload['username']);
+                room.connectedUsers
+                    .add(User(username: payload['username'], email: ""));
+                break;
+              }
+            case PayloadType.RoomEvent:
+              {
+                messagingService.unsubscribe(channel);
+                //TODO: Remove
+                //room.rounds[0].status = Status.ONGOING;
+                //room.rounds[0].lots[1].status = Status.ONGOING;
+                var event = RoomEventPayload.fromJson(payload);
+                if (event.intervalsEnded.isEmpty) {
+                  room.status = Status.ONGOING;
+                  for (var i in event.intervalsStarted) {
+                    if (i.type == IntervalType.ROUND) {
+                      room.rounds[0].status = i.status;
+                    }
+                    if (i.type == IntervalType.LOT) {
+                      room.rounds[0].lots[0].status = i.status;
+                    }
                   }
                 }
-              }
 
-              view?.openRoom(room);
-            }
+                view?.openRoom(room);
+              }
           }
         },
         onJoin: (event) {
@@ -78,17 +79,16 @@ class WaitingPresenterImpl implements WaitingPresenter{
         },
         onLeave: (event) {
           view?.removeWatcher(event.user);
-        }
-    );
+        });
 
-    if(room.startTime!=null){
+    if (room.startTime != null) {
       view?.setClock(room.startTime!.millisecondsSinceEpoch);
-    }else {
+    } else {
       view?.setClock(0);
     }
 
     messagingService.getPresence(channel).then((value) {
-      for(String u in value){
+      for (String u in value) {
         view?.addWatcher(u);
       }
     });
@@ -103,9 +103,8 @@ class WaitingPresenterImpl implements WaitingPresenter{
   void joinClick() async {
     final client = RoomWebService(
         await getIt<ServerDataProvider>().getDioInstance(true),
-        baseUrl: getIt<ServerDataProvider>().getBaseUrl()
-    );
-    if(room?.id!=null) {
+        baseUrl: getIt<ServerDataProvider>().getBaseUrl());
+    if (room?.id != null) {
       client.joinRoom(room?.id ?? 0);
     }
   }
@@ -114,16 +113,15 @@ class WaitingPresenterImpl implements WaitingPresenter{
   void leaveClick() async {
     final client = RoomWebService(
         await getIt<ServerDataProvider>().getDioInstance(true),
-        baseUrl: getIt<ServerDataProvider>().getBaseUrl()
-    );
-    if(room?.id!=null) {
+        baseUrl: getIt<ServerDataProvider>().getBaseUrl());
+    if (room?.id != null) {
       client.leaveRoom(room?.id ?? 0);
     }
   }
 
   @override
   void dispose() {
-    if(room == null){
+    if (room == null) {
       return;
     }
     ServerDataProvider provider = getIt<ServerDataProvider>();
@@ -134,13 +132,12 @@ class WaitingPresenterImpl implements WaitingPresenter{
 
   @override
   void sendNextPoint() async {
-    if(room==null) {
+    if (room == null) {
       return;
     }
     final client = AuctionWebService(
         await getIt<ServerDataProvider>().getDioInstance(true),
-        baseUrl: getIt<ServerDataProvider>().getBaseUrl()
-    );
+        baseUrl: getIt<ServerDataProvider>().getBaseUrl());
     client.nextPoint(room!.id);
   }
 }

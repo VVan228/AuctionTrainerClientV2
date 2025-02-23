@@ -29,7 +29,8 @@ class LoginPresenterImpl implements LoginPresenter{
 
     signIn?.showLoading();
     LoginRequest request = LoginRequest(email: email, password: password);
-    await getIt<AuthService>().login(request).then((value) => signIn?.openMainPage()).onError((error, stackTrace) => signIn?.showGlobalError(error.toString()));
+    await getIt<AuthService>().login(request).then((value) => signIn?.openMainPage());
+        //.onError((error, stackTrace) => signIn?.showGlobalError(error.toString()));
     signIn?.hideLoading();
   }
 

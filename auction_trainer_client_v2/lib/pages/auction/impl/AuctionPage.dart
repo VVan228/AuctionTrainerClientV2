@@ -19,8 +19,7 @@ class AuctionPage extends StatefulWidget {
   State<AuctionPage> createState() => _AuctionPageState();
 }
 
-class _AuctionPageState extends State<AuctionPage> implements AuctionView{
-
+class _AuctionPageState extends State<AuctionPage> implements AuctionView {
   String user = getIt<TokenService>().getUser().username;
   bool isAdmin = false;
 
@@ -32,18 +31,19 @@ class _AuctionPageState extends State<AuctionPage> implements AuctionView{
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text(widget.room.status==Status.ONGOING?"Ongoing room":"Ended room")
-        ),
+            title: Text(widget.room.status == Status.ONGOING
+                ? "Ongoing room"
+                : "Ended room")),
         floatingActionButton: Visibility(
-            child: FloatingActionButton(
-              child: Icon(Icons.send),
-              onPressed: () {
-                presenter.sendNextPoint();
-              },
-            ),
+          child: FloatingActionButton(
+            child: const Icon(Icons.send),
+            onPressed: () {
+              presenter.sendNextPoint();
+            },
+          ),
           visible: isAdmin,
         ),
-        backgroundColor: Theme.of(context).shadowColor,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         body: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 2500, minWidth: 200),
           child: ListView.builder(
@@ -52,21 +52,21 @@ class _AuctionPageState extends State<AuctionPage> implements AuctionView{
               shrinkWrap: true,
               itemBuilder: (BuildContext ctxt, int i) {
                 return Padding(
-                  padding: EdgeInsets.symmetric(vertical: 20),
+                  padding: const EdgeInsets.symmetric(vertical: 20),
                   child: Container(
                     color: widget.room.rounds[i].status == Status.ONGOING
                         ? Theme.of(context).primaryColor.withOpacity(0.15)
                         : Theme.of(context).scaffoldBackgroundColor,
                     child: Column(children: [
                       Padding(
-                        padding: EdgeInsets.symmetric(vertical: 5),
+                        padding: const EdgeInsets.symmetric(vertical: 5),
                         child: ListView.builder(
                             itemCount: widget.room.rounds[i].lots.length,
                             shrinkWrap: true,
                             itemBuilder: (BuildContext ctx2, int j) {
                               var _betController = TextEditingController();
                               return Padding(
-                                padding: EdgeInsets.all(10),
+                                padding: const EdgeInsets.all(10),
                                 child: Row(
                                   //alignment: Alignment.center,
                                   //padding: EdgeInsets.symmetric(vertical: 20),
@@ -85,17 +85,19 @@ class _AuctionPageState extends State<AuctionPage> implements AuctionView{
                                         width: 150,
                                         height: 150,
                                         child: Padding(
-                                            padding: EdgeInsets.all(10),
+                                            padding: const EdgeInsets.all(10),
                                             child: Column(
                                               children: [
                                                 Padding(
-                                                  padding: const EdgeInsets.only(
-                                                      bottom: 10),
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          bottom: 10),
                                                   child: Row(
                                                     children: [
                                                       Padding(
                                                         padding:
-                                                            const EdgeInsets.only(
+                                                            const EdgeInsets
+                                                                .only(
                                                                 right: 10),
                                                         child: Text(
                                                           widget.room.rounds[i]
@@ -137,13 +139,13 @@ class _AuctionPageState extends State<AuctionPage> implements AuctionView{
                                                           .titleSmall,
                                                     ),
                                                     Padding(
-                                                      padding:
-                                                          const EdgeInsets.symmetric(
-                                                              horizontal: 10),
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                          horizontal: 10),
                                                       child: Icon(widget
-                                                                  .room
-                                                                  .rounds[i]
-                                                                  .ascending
+                                                              .room
+                                                              .rounds[i]
+                                                              .ascending
                                                           ? Icons
                                                               .keyboard_arrow_up_sharp
                                                           : Icons
@@ -174,34 +176,50 @@ class _AuctionPageState extends State<AuctionPage> implements AuctionView{
                                       ),
                                     ),
                                     Visibility(
-                                      visible: widget
-                                              .room.rounds[i].lots[j].status ==
-                                          Status.ONGOING && !isAdmin,
+                                      visible: widget.room.rounds[i].lots[j]
+                                                  .status ==
+                                              Status.ONGOING &&
+                                          !isAdmin,
                                       child: SizedBox(
                                         width: 150,
                                         height: 150,
                                         child: Padding(
-                                            padding: EdgeInsets.all(10),
+                                            padding: const EdgeInsets.all(10),
                                             child: Column(
                                               children: [
                                                 TextFormField(
-                                                  enabled: isActive(i, j, widget
-                                                      .room.rounds[i].lots[j].intervalId),
-                                                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-                                                  keyboardType: TextInputType.number,
-                                                  decoration:
-                                                  InputDecoration(
-                                                    label: Text(
-                                                        bets[widget
-                                                            .room.rounds[i].lots[j].intervalId]==null?"bet":
-                                                        bets[widget
-                                                            .room.rounds[i].lots[j].intervalId].toString()),
+                                                  enabled: isActive(
+                                                      i,
+                                                      j,
+                                                      widget.room.rounds[i]
+                                                          .lots[j].intervalId),
+                                                  inputFormatters: [
+                                                    FilteringTextInputFormatter
+                                                        .digitsOnly
+                                                  ],
+                                                  keyboardType:
+                                                      TextInputType.number,
+                                                  decoration: InputDecoration(
+                                                    label: Text(bets[widget
+                                                                .room
+                                                                .rounds[i]
+                                                                .lots[j]
+                                                                .intervalId] ==
+                                                            null
+                                                        ? "bet"
+                                                        : bets[widget
+                                                                .room
+                                                                .rounds[i]
+                                                                .lots[j]
+                                                                .intervalId]
+                                                            .toString()),
                                                   ),
                                                   controller: _betController,
                                                 ),
                                                 Padding(
                                                     padding:
-                                                        EdgeInsets.only(top: 7),
+                                                        const EdgeInsets.only(
+                                                            top: 7),
                                                     child: Row(
                                                       children: [
                                                         Icon(
@@ -212,13 +230,21 @@ class _AuctionPageState extends State<AuctionPage> implements AuctionView{
                                                         ),
                                                         Padding(
                                                           padding:
-                                                              const EdgeInsets.only(
+                                                              const EdgeInsets
+                                                                  .only(
                                                                   left: 2),
                                                           child: OutlinedButton(
                                                               onPressed: () {
                                                                 presenter.makeBet(
-                                                                    widget.room.rounds[i].lots[j].intervalId,
-                                                                    int.parse(_betController.text));
+                                                                    widget
+                                                                        .room
+                                                                        .rounds[
+                                                                            i]
+                                                                        .lots[j]
+                                                                        .intervalId,
+                                                                    int.parse(
+                                                                        _betController
+                                                                            .text));
                                                               },
                                                               child: const Text(
                                                                   "send!")),
@@ -230,44 +256,82 @@ class _AuctionPageState extends State<AuctionPage> implements AuctionView{
                                       ),
                                     ),
                                     Visibility(
-                                        child: Icon(Icons.access_time),
-                                      visible: widget
-                                          .room.rounds[i].lots[j].status ==
-                                          Status.ONGOING && isAdmin,
+                                      child: const Icon(Icons.access_time),
+                                      visible: widget.room.rounds[i].lots[j]
+                                                  .status ==
+                                              Status.ONGOING &&
+                                          isAdmin,
                                     ),
                                     Visibility(
                                       visible: widget
-                                          .room.rounds[i].lots[j].winner !=
+                                              .room.rounds[i].lots[j].winner !=
                                           null,
                                       child: SizedBox(
                                         width: 300,
                                         height: 150,
                                         child: Padding(
-                                            padding: EdgeInsets.all(10),
+                                            padding: const EdgeInsets.all(10),
                                             child: Row(
                                               children: [
-                                                Flexible(child:Text(
-                                                (widget.room.rounds[i].lots[j].winner?.username ?? ""),
-                                                  style: Theme.of(context).textTheme.headlineSmall,
+                                                Flexible(
+                                                    child: Text(
+                                                  (widget.room.rounds[i].lots[j]
+                                                          .winner?.username ??
+                                                      ""),
+                                                  style: Theme.of(context)
+                                                      .textTheme
+                                                      .headlineSmall,
                                                 )),
-                              Flexible(child:Text(
-                                                  " ("+(widget.room.rounds[i].lots[j].winner?.sum ?? 0).toString() +")",
-                                                  style: Theme.of(context).textTheme.headlineSmall,
-                                                ),),
+                                                Flexible(
+                                                  child: Text(
+                                                    " (" +
+                                                        (widget
+                                                                    .room
+                                                                    .rounds[i]
+                                                                    .lots[j]
+                                                                    .winner
+                                                                    ?.sum ??
+                                                                0)
+                                                            .toString() +
+                                                        ")",
+                                                    style: Theme.of(context)
+                                                        .textTheme
+                                                        .headlineSmall,
+                                                  ),
+                                                ),
                                                 Padding(
-                                                    padding: EdgeInsets.only(left: 5),
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 5),
                                                   child: Icon(
-                                                      (widget.room.rounds[i].lots[j].winner?.username ?? "") == user?
-                                                        Icons.check:Icons.close,
-                                                    color: (widget.room.rounds[i].lots[j].winner?.username ?? "") == user?
-                                                    Colors.green:Colors.red,
+                                                    (widget
+                                                                    .room
+                                                                    .rounds[i]
+                                                                    .lots[j]
+                                                                    .winner
+                                                                    ?.username ??
+                                                                "") ==
+                                                            user
+                                                        ? Icons.check
+                                                        : Icons.close,
+                                                    color: (widget
+                                                                    .room
+                                                                    .rounds[i]
+                                                                    .lots[j]
+                                                                    .winner
+                                                                    ?.username ??
+                                                                "") ==
+                                                            user
+                                                        ? Colors.green
+                                                        : Colors.red,
                                                   ),
                                                 ),
                                               ],
-                                              crossAxisAlignment: CrossAxisAlignment.center,
-                                              mainAxisAlignment: MainAxisAlignment.start,
-                                            )
-                                        ),
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                            )),
                                       ),
                                     ),
                                   ],
@@ -283,9 +347,8 @@ class _AuctionPageState extends State<AuctionPage> implements AuctionView{
   }
 
   bool isActive(int i, int j, int intervalId) {
-    return isLogged && bets[intervalId]==null;
+    return isLogged && bets[intervalId] == null;
   }
-
 
   @override
   void dispose() {
@@ -298,11 +361,13 @@ class _AuctionPageState extends State<AuctionPage> implements AuctionView{
     super.initState();
     presenter.setView(this);
     presenter.setRoom(widget.room);
-    isAdmin = widget.room.creator.username==getIt<TokenService>().getUser().username;
+    isAdmin = widget.room.creator.username ==
+        getIt<TokenService>().getUser().username;
 
     User thisUser = getIt<TokenService>().getUser();
-    isLogged = widget.room.connectedUsers.map((e) => e.username).contains(thisUser.username);
-
+    isLogged = widget.room.connectedUsers
+        .map((e) => e.username)
+        .contains(thisUser.username);
   }
 
   @override
@@ -321,7 +386,7 @@ class _AuctionPageState extends State<AuctionPage> implements AuctionView{
 
   @override
   void updateLotWinner(int i, int j, ParticipantBet? bet) {
-    if(bet==null){
+    if (bet == null) {
       return;
     }
     setState(() {
@@ -345,8 +410,6 @@ class _AuctionPageState extends State<AuctionPage> implements AuctionView{
 
   @override
   void showError(String error) {
-    ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-            content: Text(error)));
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(error)));
   }
 }

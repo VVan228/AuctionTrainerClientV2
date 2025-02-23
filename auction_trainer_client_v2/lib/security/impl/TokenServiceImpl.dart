@@ -8,11 +8,10 @@ import 'package:jwt_decoder/jwt_decoder.dart';
 
 import '../../inject_config/DependenciesConfiguration.dart';
 import '../model/User.dart';
-import '../model/requests/LoginRequest.dart';
 import '../model/requests/UpdateTokenRequest.dart';
 
 @Singleton(as: TokenService)
-class TokenServiceImpl implements TokenService{
+class TokenServiceImpl implements TokenService {
   static SharedPreferences? prefs;
 
   static TokenServiceImpl? obj;
@@ -24,11 +23,11 @@ class TokenServiceImpl implements TokenService{
   @PostConstruct()
   void init() {
     print("shared pref");
-    SharedPreferences.getInstance().then((value) => prefs=value);
+    SharedPreferences.getInstance().then((value) => prefs = value);
   }
 
   Future<Map<String, String?>> getTokens() async {
-    if(tokens['refresh_token']!=null && tokens['access_token']!=null){
+    if (tokens['refresh_token'] != null && tokens['access_token'] != null) {
       return tokens;
     }
     Map<String, String?> res = {
@@ -38,6 +37,7 @@ class TokenServiceImpl implements TokenService{
     tokens = res;
     return res;
   }
+
   @override
   Future<void> setTokens(String refreshToken, String accessToken) async {
     prefs?.setString('refresh_token', refreshToken);
@@ -46,8 +46,7 @@ class TokenServiceImpl implements TokenService{
     print(JwtDecoder.decode(accessToken));
     user = User(
         email: JwtDecoder.decode(accessToken)['email'],
-        username: JwtDecoder.decode(accessToken)['sub']
-    );
+        username: JwtDecoder.decode(accessToken)['sub']);
 
     tokens["refresh_token"] = prefs?.getString('refresh_token');
     tokens["access_token"] = prefs?.getString('access_token');
@@ -63,15 +62,13 @@ class TokenServiceImpl implements TokenService{
         accessToken.isNotEmpty &&
         !JwtDecoder.isExpired(refreshToken);
 
-    if(res) {
+    if (res) {
       user = User(
           email: JwtDecoder.decode(accessToken)['email'],
-          username: JwtDecoder.decode(accessToken)['sub']
-      );
+          username: JwtDecoder.decode(accessToken)['sub']);
     }
     return res;
   }
-
 
   @override
   Future<String?> getAccessToken() async {
@@ -81,16 +78,14 @@ class TokenServiceImpl implements TokenService{
     if (!JwtDecoder.isExpired(accessToken)) {
       return accessToken;
     } else if (!JwtDecoder.isExpired(refreshToken)) {
-
       final client = AuthWebService(
           await getIt<ServerDataProvider>().getDioInstance(false),
-          baseUrl: getIt<ServerDataProvider>().getBaseUrl()
-      );
+          baseUrl: getIt<ServerDataProvider>().getBaseUrl());
 
       UpdateTokenRequest utr = UpdateTokenRequest(refreshToken: refreshToken);
 
       TokenResponse response = await client.updateToken(utr);
-      if(response.accessToken.isNotEmpty && response.refreshToken.isNotEmpty){
+      if (response.accessToken.isNotEmpty && response.refreshToken.isNotEmpty) {
         setTokens(response.refreshToken, response.accessToken);
       }
 

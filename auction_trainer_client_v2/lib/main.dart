@@ -27,7 +27,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
         debugShowCheckedModeBanner: false,
-
         theme: FlexThemeData.light(
           useMaterial3: true,
           scheme: FlexScheme.redWine,
@@ -83,7 +82,6 @@ class MyApp extends StatelessWidget {
         ),
         // Use dark or light theme based on system setting.
         themeMode: ThemeMode.system,
-
         home: const StateCheck());
   }
 }
@@ -92,17 +90,16 @@ class StateCheck extends StatelessWidget {
   const StateCheck({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-
     var isLogged = getIt<TokenService>().isLogged();
 
     return FutureBuilder<bool>(
       future: isLogged,
       builder: (context, snapshot) {
         bool logged = snapshot.data ?? false;
-        if(logged) {
-          return MainPage();
+        if (logged) {
+          return const MainPage();
         } else {
-          return LoginPage();
+          return const LoginPage();
         }
       },
     );

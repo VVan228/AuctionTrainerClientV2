@@ -74,7 +74,7 @@ extension GetItInjectableX on _i1.GetIt {
         () => _i16.SelectTemplatePresenterImpl());
     gh.lazySingleton<_i17.ServerDataProvider>(
         () => _i18.RetrofitDataProvider());
-    gh.singleton<_i19.TokenService>(_i20.TokenServiceImpl()..init());
+    gh.singleton<_i19.TokenService>(() => _i20.TokenServiceImpl()..init());
     gh.lazySingleton<_i21.WaitingPresenter>(() => _i22.WaitingPresenterImpl());
     return this;
   }

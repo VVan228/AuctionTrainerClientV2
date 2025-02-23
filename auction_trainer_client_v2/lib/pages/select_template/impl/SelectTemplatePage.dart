@@ -49,7 +49,7 @@ class SelectTemplatePage extends StatelessWidget {
             ),
             FloatingActionButton(
               heroTag: null,
-              onPressed: () {  },
+              onPressed: () {},
               child: const Icon(Icons.skip_next),
             )
           ],
@@ -59,23 +59,15 @@ class SelectTemplatePage extends StatelessWidget {
   }
 }
 
-class _SelectMyTemplateState extends State<SelectMyTemplate> implements SelectTemplateView{
-
+class _SelectMyTemplateState extends State<SelectMyTemplate>
+    implements SelectTemplateView {
   SelectTemplatePresenter? presenter;
   int pageSize = 20;
-  final PagingController<int, Template> _pagingController = PagingController(firstPageKey: 0);
+  final PagingController<int, Template> _pagingController =
+      PagingController(firstPageKey: 0);
 
-  List<String> searchOptions = [
-    "View",
-    "Copy",
-    "Add",
-    "Select"
-  ];
-  List<String> myOptions = [
-    "View",
-    "Copy",
-    "Select"
-  ];
+  List<String> searchOptions = ["View", "Copy", "Add", "Select"];
+  List<String> myOptions = ["View", "Copy", "Select"];
 
   @override
   Widget build(BuildContext context) {
@@ -84,122 +76,135 @@ class _SelectMyTemplateState extends State<SelectMyTemplate> implements SelectTe
           pagingController: _pagingController,
           builderDelegate: PagedChildBuilderDelegate<Template>(
               itemBuilder: (context, item, index) {
-                return Padding(
-                  padding: EdgeInsets.symmetric(vertical: 7, horizontal: 5),
-                  child: ListTile(
-                //   if(e == "View") {
-                // presenter?.viewTemplateClick(item.data);
-                // }
-                //     if(e == "Copy") {
-                //   presenter?.copyTemplateClick(item.data);
-                // }
-                // if(e == "Add") {
-                //   presenter?.approveTemplateClick(item);
-                // }
-                // if(e == "Select") {
-                //   //TODO:
-                // }
-                    leading: ConstrainedBox(
-                      constraints: BoxConstraints(maxWidth: 100, minWidth: 40),
-                      child: Row(
-                        children: [
-                          IconButton(
-                            icon: Icon(Icons.remove_red_eye,),
-                            onPressed: () {
-                              presenter?.viewTemplateClick(item.data);
-                            },
-                          ),
-                          IconButton(
-                            icon: Icon(Icons.copy, size: 20,),
-                            onPressed: () {
-                              presenter?.copyTemplateClick(item.data);
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                    title: Text(item.data.templateName),
-                    trailing: Column(
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 5),
+              child: ListTile(
+                  //   if(e == "View") {
+                  // presenter?.viewTemplateClick(item.data);
+                  // }
+                  //     if(e == "Copy") {
+                  //   presenter?.copyTemplateClick(item.data);
+                  // }
+                  // if(e == "Add") {
+                  //   presenter?.approveTemplateClick(item);
+                  // }
+                  // if(e == "Select") {
+                  //   //TODO:
+                  // }
+                  leading: ConstrainedBox(
+                    constraints:
+                        const BoxConstraints(maxWidth: 100, minWidth: 40),
+                    child: Row(
                       children: [
-                        Visibility(
-                          visible: widget.searchMode,
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              IconButton(onPressed: (){
-                                presenter?.approveTemplateClick(item);
-                              }, icon: Icon(Icons.save,)),
-                              Text("${item.approvesAmount}")
-                            ],
+                        IconButton(
+                          icon: const Icon(
+                            Icons.remove_red_eye,
                           ),
+                          onPressed: () {
+                            presenter?.viewTemplateClick(item.data);
+                          },
                         ),
-                        Visibility(
-                          visible: !widget.searchMode,
-                          child: item.creator.username==getIt<TokenService>().getUser().username?
-                          IconButton(onPressed: () {
-                            presenter?.deleteTemplateClick(item);
-                          }, icon: Icon((Icons.publish)))
-                                  :
-                            item.isDefault?
-                              const IconButton(onPressed: null, icon: Icon(Icons.settings))
-                                :
-                              IconButton(icon: const Icon(Icons.bookmark), onPressed: (){
-                                presenter?.unapproveTemplateClick(item);
-                              },)
+                        IconButton(
+                          icon: const Icon(
+                            Icons.copy,
+                            size: 20,
+                          ),
+                          onPressed: () {
+                            presenter?.copyTemplateClick(item.data);
+                          },
                         ),
                       ],
                     ),
-                    subtitle: ConstrainedBox(
-                      constraints: const BoxConstraints(maxHeight: 10, minHeight: 10),
-                      child: ListView.builder(
+                  ),
+                  title: Text(item.data.templateName),
+                  trailing: Column(
+                    children: [
+                      Visibility(
+                        visible: widget.searchMode,
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            IconButton(
+                                onPressed: () {
+                                  presenter?.approveTemplateClick(item);
+                                },
+                                icon: const Icon(
+                                  Icons.save,
+                                )),
+                            Text("${item.approvesAmount}")
+                          ],
+                        ),
+                      ),
+                      Visibility(
+                          visible: !widget.searchMode,
+                          child: item.creator.username ==
+                                  getIt<TokenService>().getUser().username
+                              ? IconButton(
+                                  onPressed: () {
+                                    presenter?.deleteTemplateClick(item);
+                                  },
+                                  icon: const Icon((Icons.publish)))
+                              : item.isDefault
+                                  ? const IconButton(
+                                      onPressed: null,
+                                      icon: Icon(Icons.settings))
+                                  : IconButton(
+                                      icon: const Icon(Icons.bookmark),
+                                      onPressed: () {
+                                        presenter?.unapproveTemplateClick(item);
+                                      },
+                                    )),
+                    ],
+                  ),
+                  subtitle: ConstrainedBox(
+                    constraints:
+                        const BoxConstraints(maxHeight: 10, minHeight: 10),
+                    child: ListView.builder(
                         scrollDirection: Axis.horizontal,
                         itemCount: item.data.rounds.length,
                         shrinkWrap: true,
                         itemBuilder: (BuildContext ctxt, int i) {
-                          return Icon(item.data.rounds[i].ascending? Icons.keyboard_arrow_up_sharp:Icons.keyboard_arrow_down_sharp);
-                        }
-                        ),
-                      ),
-                      // ToggleButtons(
-                      //   direction: Axis.horizontal,
-                      //   isSelected:
-                      //       widget.searchMode?
-                      //         searchOptions.map((e) => false).toList()
-                      //       :
-                      //         myOptions.map((e) => false).toList()
-                      //   ,
-                      //   children:
-                      //     widget.searchMode?
-                      //       searchOptions.map((e) => Text(e)).toList()
-                      //     :
-                      //       myOptions.map((e) => Text(e)).toList()
-                      //   ,
-                      //   selectedColor: Theme.of(context).primaryColorDark,
-                      //   borderColor: Theme.of(context).scaffoldBackgroundColor,
-                      //   selectedBorderColor: Theme.of(context).scaffoldBackgroundColor,
-                      //   onPressed: widget.viewMode?(int i){}:(int i) {
-                      //     if(i==0) {
-                      //       setManualMode(true);
-                      //     }else {
-                      //       setManualMode(false);
-                      //     }
-                      //   },
-                      // )
-                    onTap: () {
-                      presenter?.selectTemplateClick(item);
-                    }
-
+                          return Icon(item.data.rounds[i].ascending
+                              ? Icons.keyboard_arrow_up_sharp
+                              : Icons.keyboard_arrow_down_sharp);
+                        }),
                   ),
-                );
-              }
-          ),
+                  // ToggleButtons(
+                  //   direction: Axis.horizontal,
+                  //   isSelected:
+                  //       widget.searchMode?
+                  //         searchOptions.map((e) => false).toList()
+                  //       :
+                  //         myOptions.map((e) => false).toList()
+                  //   ,
+                  //   children:
+                  //     widget.searchMode?
+                  //       searchOptions.map((e) => Text(e)).toList()
+                  //     :
+                  //       myOptions.map((e) => Text(e)).toList()
+                  //   ,
+                  //   selectedColor: Theme.of(context).primaryColorDark,
+                  //   borderColor: Theme.of(context).scaffoldBackgroundColor,
+                  //   selectedBorderColor: Theme.of(context).scaffoldBackgroundColor,
+                  //   onPressed: widget.viewMode?(int i){}:(int i) {
+                  //     if(i==0) {
+                  //       setManualMode(true);
+                  //     }else {
+                  //       setManualMode(false);
+                  //     }
+                  //   },
+                  // )
+                  onTap: () {
+                    presenter?.selectTemplateClick(item);
+                  }),
+            );
+          }),
         ),
         onRefresh: () async {
           presenter?.manualUpdate();
-        }
-    );
+        });
   }
 
   @override
@@ -242,9 +247,16 @@ class _SelectMyTemplateState extends State<SelectMyTemplate> implements SelectTe
   Future<TemplateData?> openNewTemplatePage() async {
     return Navigator.push<TemplateData>(
       context,
-      MaterialPageRoute(builder: (context) => CreateTemplatePage(
-        viewMode: false,
-        templateData: TemplateData(manualMode: false, templateName: "", lotNames: [], lotDescriptions: [], rounds: []),)),
+      MaterialPageRoute(
+          builder: (context) => CreateTemplatePage(
+                viewMode: false,
+                templateData: TemplateData(
+                    manualMode: false,
+                    templateName: "",
+                    lotNames: [],
+                    lotDescriptions: [],
+                    rounds: []),
+              )),
     );
   }
 
@@ -252,9 +264,9 @@ class _SelectMyTemplateState extends State<SelectMyTemplate> implements SelectTe
   Future<TemplateData?> openCopyTemplatePage(TemplateData data) {
     return Navigator.push<TemplateData>(
       context,
-      MaterialPageRoute(builder: (context) => CreateTemplatePage(
-        viewMode: false,
-        templateData: data)),
+      MaterialPageRoute(
+          builder: (context) =>
+              CreateTemplatePage(viewMode: false, templateData: data)),
     );
   }
 
@@ -263,10 +275,9 @@ class _SelectMyTemplateState extends State<SelectMyTemplate> implements SelectTe
     print("view page open" + data.toJson().toString());
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => CreateTemplatePage(
-          viewMode: true,
-          templateData: data)
-      ),
+      MaterialPageRoute(
+          builder: (context) =>
+              CreateTemplatePage(viewMode: true, templateData: data)),
     );
   }
 
@@ -274,19 +285,18 @@ class _SelectMyTemplateState extends State<SelectMyTemplate> implements SelectTe
   void openCreateRoomPage(Template template) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => CreateRoomPage(
-          template: template)
-      ),
+      MaterialPageRoute(
+          builder: (context) => CreateRoomPage(template: template)),
     );
   }
 }
 
 class SelectMyTemplate extends StatefulWidget {
-
-  const SelectMyTemplate({Key? key, required this.searchMode}) : super(key: key);
+  const SelectMyTemplate({Key? key, required this.searchMode})
+      : super(key: key);
 
   final bool searchMode;
 
   @override
-  State<StatefulWidget> createState()  => _SelectMyTemplateState();
+  State<StatefulWidget> createState() => _SelectMyTemplateState();
 }

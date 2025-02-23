@@ -5,7 +5,6 @@ import 'package:auction_trainer_client_v2/security/model/LotRequest.dart';
 import 'package:intl/intl.dart';
 import 'package:json_annotation/json_annotation.dart';
 
-import 'LotRequest.dart';
 
 part 'CreateRoomRequest.g.dart';
 

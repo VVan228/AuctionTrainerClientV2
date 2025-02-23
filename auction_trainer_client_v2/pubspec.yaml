@@ -27,37 +27,38 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
-  intl: ^0.17.0
-  retrofit: '>=4.0.0 <5.0.0'
-  dio: ^5.0.0
-  built_value: ^8.5.0
-  json_annotation: ^4.8.1
-  injectable: ^2.1.1
-  get_it: ^7.6.0
+  intl: ^0.20.2
+  retrofit: ^4.4.0
+  logger: ^2.4.0
+  dio: ^5.8.0+1
+  built_value: ^8.9.3
+  json_annotation: ^4.9.0
+  injectable: ^2.5.0
+  get_it: ^8.0.3
   flutter_countdown_timer: ^4.1.0
-  circular_countdown_timer: ^0.2.3
+  circular_countdown_timer: ^0.2.4
   flutter:
     sdk: flutter
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.2
-  flex_color_scheme: ^7.1.2
-  google_fonts: ^4.0.4
-  infinite_scroll_pagination: ^3.2.0
+  cupertino_icons: ^1.0.8
+  flex_color_scheme: ^8.1.1
+  google_fonts: ^6.2.1
+  infinite_scroll_pagination: ^4.1.0
   flutter_datetime_picker: ^1.5.1
 
 dev_dependencies:
-  retrofit_generator: '>=5.0.0 <6.0.0'
-  build_runner: '>=2.3.0 <4.0.0'
-  json_serializable: ^6.7.0
-  built_value_generator: ^8.5.0
-  shared_preferences: ^2.1.1
+  retrofit_generator: '^7.0.8'
+  build_runner: ^2.3.3
+  json_serializable: ^6.8.0
+  built_value_generator: ^8.9.3
+  shared_preferences: ^2.5.2
   jwt_decoder: ^2.0.1
-  injectable_generator: ^2.1.5
+  injectable_generator: ^2.6.0
   centrifuge: ^0.9.3
-  http: ^0.13.6
-  flutter_expandable_fab: ^1.7.1
+  http: ^1.0.0
+  flutter_expandable_fab: ^2.3.0
   flutter_test:
     sdk: flutter
 

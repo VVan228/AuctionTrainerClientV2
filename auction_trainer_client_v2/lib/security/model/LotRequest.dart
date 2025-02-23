@@ -1,7 +1,5 @@
 
 import 'package:auction_trainer_client_v2/security/model/BetParams.dart';
-import 'package:auction_trainer_client_v2/security/model/ParticipantBet.dart';
-import 'package:auction_trainer_client_v2/security/model/notifications/enums.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'LotRequest.g.dart';

@@ -18,7 +18,7 @@ class MainPage extends StatefulWidget {
   State<MainPage> createState() => _MainPageState();
 }
 
-class _MainPageState extends State<MainPage> implements MainView{
+class _MainPageState extends State<MainPage> implements MainView {
   final _roomController = TextEditingController();
 
   MainPresenter presenter = getIt<MainPresenter>();
@@ -52,18 +52,23 @@ class _MainPageState extends State<MainPage> implements MainView{
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             Padding(
-                              padding: EdgeInsets.only(top: 10, left: 10),
+                              padding: const EdgeInsets.only(top: 10, left: 10),
                               child: Text(
                                 "Enter room id",
                                 style:
                                     Theme.of(context).textTheme.headlineMedium,
                               ),
                             ),
-                            Text(errorMsg, style: const TextStyle(color: Colors.red),),
+                            Text(
+                              errorMsg,
+                              style: const TextStyle(color: Colors.red),
+                            ),
                             Padding(
-                              padding: EdgeInsets.all(15),
+                              padding: const EdgeInsets.all(15),
                               child: TextFormField(
-                                inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                                inputFormatters: [
+                                  FilteringTextInputFormatter.digitsOnly
+                                ],
                                 keyboardType: TextInputType.number,
                                 decoration: const InputDecoration(
                                   label: Text("roomId"),
@@ -82,7 +87,8 @@ class _MainPageState extends State<MainPage> implements MainView{
                                 ),
                                 TextButton(
                                   onPressed: () {
-                                    Navigator.pop(context, _roomController.text);
+                                    Navigator.pop(
+                                        context, _roomController.text);
                                   },
                                   child: const Text('Ok'),
                                 ),
@@ -100,7 +106,7 @@ class _MainPageState extends State<MainPage> implements MainView{
         body: Column(
           children: [
             Padding(
-              padding: EdgeInsets.only(top: 100, left: 10, right: 10),
+              padding: const EdgeInsets.only(top: 100, left: 10, right: 10),
               child: Text(
                 "Приветствую, " + getIt<TokenService>().getUser().username,
                 textAlign: TextAlign.center,
@@ -110,7 +116,6 @@ class _MainPageState extends State<MainPage> implements MainView{
           ],
         ));
   }
-
 
   @override
   void initState() {
@@ -145,7 +150,7 @@ class _MainPageState extends State<MainPage> implements MainView{
   void openCreatePage() {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => SelectTemplatePage()),
+      MaterialPageRoute(builder: (context) => const SelectTemplatePage()),
     );
   }
 }
